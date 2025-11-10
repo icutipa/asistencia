@@ -36,7 +36,7 @@ def actualizar_programa(id_programa, programa):
         try:
             cursor = conexion.cursor()
             sql = "UPDATE programa SET nombre_programa=>%s WHERE id_programa=%s"
-            cursor.excute(sql (programa, id_programa))
+            cursor.excute(sql, (programa, id_programa))
             conexion.commit()
             if cursor.rowcount > 0:
                 print("Registro actualizado con éxito")
@@ -53,7 +53,7 @@ def eliminar_programa(id_programa):
         try:
             cursor = conexion.cursor()
             sql = "DELETE FROM programa WHERE id_programa= %s"
-            cursor.execute(sql, (id_seemstre))
+            cursor.execute(sql, (id_programa,))
             conexion.commit()
             if cursor.rowcount > 0:
                 print("El registro se ha eliminado correctamente")
