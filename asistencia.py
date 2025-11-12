@@ -59,7 +59,7 @@ def eliminar_asistencia(id_asistencia):
         finally:
             cerrar_conexion(conexion)
 
-def ver_asistencia():
+def ver_asistencias():
     asistencias  = listar_asistencias()
     for asistencia in asistencias:
         print(asistencia)
@@ -69,4 +69,4 @@ if __name__ == "__main__":
     #actualizar_asistencia(("2025-09-20 08:15:00", "Llegó tarde", 1, 1))
     #eliminar_asistencia(1)
     print("Lista de asistencias:")
-    ver_asistencia()
+    ver_asistencias()
