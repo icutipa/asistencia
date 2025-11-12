@@ -1,5 +1,22 @@
 from db import conectar_bd, cerrar_conexion
 
+def listar_asistencias():
+    conexion = conectar_bd()
+    asistencias = []
+    if conexion:
+        try:
+            cursor = conexion.cursor()
+            sql = "SELECT * FROM asistencia"
+            cursor.execute(sql)
+            asistencias = cursor.fetchall()
+            return asistencias
+        except Exception as e:
+            print(f"Error al listar asistencias: {e}")
+            return []
+        finally:
+            cerrar_conexion(conexion)
+    return asistencias
+
 def insertar_asistencia(asistencia):
     conexion = conectar_bd()
     if conexion:
@@ -42,28 +59,14 @@ def eliminar_asistencia(id_asistencia):
         finally:
             cerrar_conexion(conexion)
 
-def listar_asistencias():
-    conexion = conectar_bd()
-    asistencias = []
-    if conexion:
-        try:
-            cursor = conexion.cursor()
-            sql = "SELECT * FROM asistencia"
-            cursor.execute(sql)
-            asistencias = cursor.fetchall()
-            return asistencias
-        except Exception as e:
-            print(f"Error al listar asistencias: {e}")
-            return []
-        finally:
-            cerrar_conexion(conexion)
+def ver_asistencia():
+    asistencias  = listar_asistencias()
+    for asistencia in asistencias:
+        print(asistencia)
 
 if __name__ == "__main__":
-    insertar_asistencia(("2025-09-20 08:00:00", "Asistencia puntual", 1))
-    
-    # actualizar_asistencia(("2025-09-20 08:15:00", "Llegó tarde", 1, 1))
-    # eliminar_asistencia(1)
+    #insertar_asistencia(("2025-09-22 08:00:00", "", 2))
+    #actualizar_asistencia(("2025-09-20 08:15:00", "Llegó tarde", 1, 1))
+    #eliminar_asistencia(1)
     print("Lista de asistencias:")
-    for asistencia in listar_asistencias():
-        print(asistencia)
-    pass
+    ver_asistencia()

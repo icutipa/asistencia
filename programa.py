@@ -64,15 +64,15 @@ def eliminar_programa(id_programa):
         finally:
             cerrar_conexion()
 
-
-if __name__ == "__main__":
+def ver_programas():
     programas = listar_programa()
     print("Lista de programas:")
     for programa in programas:
         print(programa)
-    
-    #insertar_programa(("APSTI",))
-    #insertar_programa(("ANI",))
-    #insertar_programa(("MA",))
-    #insertar_programa(("ET",))
-    
+
+if __name__ == "__main__":
+    #insertar_programa(("Arquitectura de Plataformas y Servicios de Tecnologías de Información",))
+    #insertar_programa(("Administración de Negocios Internacionales",))
+    #insertar_programa(("Mecatrónica Automotriz",))
+    #insertar_programa(("Enfermería Técnica",))
+    ver_programas()

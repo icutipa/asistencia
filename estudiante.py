@@ -48,7 +48,7 @@ def listar_estudiantes():
     if conexion:
         try:
             cursor = conexion.cursor()
-            sql = "SELECT id_estudiante, nombres, apellidos, dni, email, genero, id_programa, id_semestre FROM estudiante"
+            sql = "SELECT * FROM estudiante"
             cursor.execute(sql)
             estudiantes = cursor.fetchall()
         except Exception as e:
@@ -63,7 +63,7 @@ def buscar_estudiante_por_dni(dni):
     if conexion:
         try:
             cursor = conexion.cursor(dictionary=True)
-            sql = "SELECT id_estudiante, nombres, apellidos, dni, email, genero, id_programa, id_semestre FROM estudiante  WHERE dni = %s"
+            sql = "SELECT * FROM estudiante  WHERE dni = %s"
             cursor.execute(sql, (dni,))
             estudiante = cursor.fetchone()
         except Exception as e:
@@ -72,16 +72,16 @@ def buscar_estudiante_por_dni(dni):
             cerrar_conexion(conexion)
     return estudiante
 
-if __name__ == "__main__":
-    insertar_estudiante(("Ivan Bryan", "Mantilla Fernandez","70508270", "edi72391@gmail.com", "M", 1, 1))
-    # actualizar_estudiante(("Ivan", "Mantilla", "70508270", "ivan.mantilla@gmail.com", "M", 1, 1, 1))
-    # eliminar_estudiante(1)
+def ver_estudiantes():
     print("Lista de estudiantes:")
     for estudiante in listar_estudiantes():
         print(estudiante)
-    pass
 
-    print("\nBuscando estudiante con DNI 70508270...")
+if __name__ == "__main__":
+    #insertar_estudiante(("Ivan Bryan", "Mantilla Fernandez","70508270", "edi72391@gmail.com", "M", 1, 1))
+    actualizar_estudiante(("Ivan", "Mantilla", "70508270", "ivan.mantilla@gmail.com", "M", 1, 1, 2))
+    ver_estudiantes()
+    print("\nBuscando estudiante con DNI 70508270")
     estudiante = buscar_estudiante_por_dni("70508270")
     if estudiante:
         print("Estudiante encontrado:")
