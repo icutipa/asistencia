@@ -2,3 +2,4 @@ __pycache__/
 .env/
 .vscode/
 qr.py
+app2.py

@@ -9,6 +9,8 @@ from programa import ver_programas, insertar_programa
 from semestre import ver_semestres, insertar_semestre
 from asistencia import ver_asistencias, insertar_asistencia
 from estudiante import ver_estudiantes, insertar_estudiante, buscar_estudiante_por_dni
+from qr import leer_qr
+
 
 def es_dni_valido(dni):
     return dni.isdigit() and len(dni) == 8
@@ -71,9 +73,9 @@ def main():
             estudiante = buscar_estudiante_por_dni(dni)
             if estudiante:
                 insertar_asistencia((fecha, obs, estudiante["id_estudiante"]))
+                ver_asistencias()
             else:
                 print("No se encontró ningún estudiante con el DNI proporcionado.")
-            ver_asistencias()
         elif opcion == "5":
             print("\nSaliendo del sistema...")
             limpiar_pantalla()
