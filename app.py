@@ -9,7 +9,7 @@ from programa import ver_programas, insertar_programa
 from semestre import ver_semestres, insertar_semestre
 from asistencia import ver_asistencias, insertar_asistencia
 from estudiante import ver_estudiantes, insertar_estudiante, buscar_estudiante_por_dni
-from qr import leer_qr
+
 
 
 def es_dni_valido(dni):
