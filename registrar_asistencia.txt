@@ -1,0 +1,15 @@
+def registrar_asistencia(id_estudiante, observaciones="Asistencia Regsitrado"):
+    try:
+        conexion = obtener_conexion()
+        if conexion is None:
+            return False
+        cursor = conexion.cursor()
+        fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        sql = "INSERT INTO asistencia(fecha,observaciones, id_estudiante) VALUES(%s,%s,%s)"
+        cursor.execute(sql, (fecha, observaciones,id_estudiante))
+        conexion.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"Error al registrar asistencia: {e}")
+        return False

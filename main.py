@@ -10,12 +10,14 @@ from pyzbar.pyzbar import decode
 
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QLabel, QListWidget,
-    QHBoxLayout, QVBoxLayout
+    QHBoxLayout, QVBoxLayout, QPushButton, QMessageBox
 )
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPixmap
 
 import socket, uuid
+
+import pandas as pd
 
 def obtener_conexion():
     try:
@@ -46,6 +48,22 @@ def buscar_estudiante_por_dni(dni):
     except Exception as e:
         print(f"Error en consulta BD: {e}")
         return None
+
+def registrar_asistencia(id_estudiante, observaciones="Asistencia Regsitrado"):
+    try:
+        conexion = obtener_conexion()
+        if conexion is None:
+            return False
+        cursor = conexion.cursor()
+        fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        sql = "INSERT INTO asistencia(fecha,observaciones, id_estudiante) VALUES(%s,%s,%s)"
+        cursor.execute(sql, (fecha, observaciones,id_estudiante))
+        conexion.commit()
+        cursor.close()
+        return True
+    except Exception as e:
+        print(f"Error al registrar asistencia: {e}")
+        return False
 
 class HiloBusqueda(threading.Thread):
     def __init__(self, dni, callback):
@@ -80,6 +98,13 @@ class VentanaPrincipal(QWidget):
 
         self.lista_registro_asistencia = QListWidget()
 
+        layout_derecha = QVBoxLayout()
+        layout_derecha.addWidget(self.lista_registro_asistencia)
+        self.boton_reporte = QPushButton("Generar Reporte")
+        self.boton_reporte.setStyleSheet("font-size: 16px; padding:6px;")
+        self.boton_reporte.clicked.connect(self.generar_reporte)
+        layout_derecha.addWidget(self.boton_reporte)
+
         layout_izq = QVBoxLayout()
         layout_izq.addWidget(self.label_hora)
         layout_izq.addWidget(self.label_camara, 5)
@@ -87,7 +112,7 @@ class VentanaPrincipal(QWidget):
 
         layout_principal = QHBoxLayout()
         layout_principal.addLayout(layout_izq, 3)
-        layout_principal.addWidget(self.lista_registro_asistencia, 2)
+        layout_principal.addLayout(layout_derecha, 2)
 
         self.setLayout(layout_principal)
 
@@ -137,6 +162,27 @@ class VentanaPrincipal(QWidget):
 
         self.lista_registro_asistencia.insertItem(0, mensaje)
         self.lista_registro_asistencia.setCurrentRow(0)
+
+    def generar_reporte(self):
+        try:
+            conexion = obtener_conexion()
+            if conexion is None:
+                QMessageBox.warning(self, "Error", "No se pudo conectar a la base de datos")
+                return
+            cursor = conexion.cursor()
+            sql = "select id_asistencia, fecha, observaciones, id_estudiante from asistencia;"
+            cursor.execute(sql)
+            filas = cursor.fetchall()
+            conexion.close()
+            if not filas:
+                QMessageBox.information(self, "Reporte", "No hay registros de asistencia para reportar")
+                return
+            df = pd.DataFrame(filas,columns=["ID","Fecha", "Observaciones","Id Estudiante"])
+            nombre_archivo = f"Reporte_Asistencia_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx"
+            df.to_excel(nombre_archivo,index=False)
+            QMessageBox.information(self,"Reporte Generado",f"Reporte generado correctamente:\n{nombre_archivo}")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo generar el reporte\n{e}")
 
     def closeEvent(self, event):
         try:
