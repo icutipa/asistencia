@@ -27,14 +27,14 @@ def cerrar_conexion(connection):
 def obtener_conexion():
     return conectar_bd()
 
-if __name__ == "__main__":
-    conexion = obtener_conexion()
-    if conexion:
-        cursor = conexion.cursor()
-        cursor.execute("SELECT VERSION()")
-        version = cursor.fetchone()
-        #print(f"Versión de MySQL: {version[0]}")
-        cursor.close()
-        cerrar_conexion(conexion)
-    else:
-        print("No se pudo establecer la conexión")
+## if __name__ == "__main__":
+##    conexion = obtener_conexion()
+##    if conexion:
+##        cursor = conexion.cursor()
+##        cursor.execute("SELECT VERSION()")
+##        version = cursor.fetchone()
+##        #print(f"Versión de MySQL: {version[0]}")
+##        cursor.close()
+##        cerrar_conexion(conexion)
+##    else:
+##        print("No se pudo establecer la conexión")
