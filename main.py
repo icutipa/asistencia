@@ -156,6 +156,9 @@ class VentanaPrincipal(QWidget):
             id_estudiante, nombres, apellidos, dni, email, programa, semestre = estudiante
             self.label_datos.setText(f"{hora}\nDNI: {dni}\n{nombres} {apellidos}\nPrograma: {programa} | Semestre: {semestre}")
             mensaje = f"{hora} - {dni} - {nombres} {apellidos}"
+            exito = registrar_asistencia(id_estudiante)
+            if not exito:
+                print(f"No se pudo guardar la asistencia en la base de datos")
         else:
             self.label_datos.setText(f"DNI: {dni}\nNO REGISTRADO EN LA BD")
             mensaje = f"{hora} - {dni} - NO REGISTRADO"
